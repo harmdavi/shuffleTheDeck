@@ -2,6 +2,7 @@
 'RCET0265
 'Spring 2020
 'Shuffle The Deck
+'https://github.com/harmdavi/shuffleTheDeck.git
 
 Option Strict On
 Option Explicit On
@@ -17,40 +18,39 @@ Module shuffleTheDeck
         Dim row As Integer = 12
         Dim column As Integer = 3
         Dim formattedString As String
-        Dim currentArray(0 To 13, 0 To 4) As Boolean
+        Dim currentArray(13, 4) As Boolean
         Dim randomColumn As Integer
         Dim randomRow As Integer
         Dim cardSuit As String
         Dim cardNumber As String
         Dim cardsInDeck As Single
         Dim userinput As String
-        Dim cardsRemaining As Single
+        'Dim cardsRemaining As Single
         Dim setRow As Integer
         Dim setColumn As Integer
         Dim intI As Integer
         Dim intJ As Integer
-        Dim randomRowBuffer As Integer
-        Dim randomColumnBuffer As Integer
+        ' Dim randomRowBuffer As Integer
+        'Dim randomColumnBuffer As Integer
 
         ' Initialize the random-number generator.
         Randomize()
-
-        ' Generate random value between 0 and 3.
-
-        'row = 13
-        'column = 4
-
+        'Sets the array to all false until shuffled so that we can switch it true and keep track of arleady used cards.
         cardsInDeck = 1
         Do Until cardsInDeck = -1
             For intI = 0 To 13
                 For intJ = 0 To 4
-
+                    'Sets entire array to false
                     currentArray(intI, intJ) = False
+
+
                     'If currentArray(intI, intJ) Then
                     '    Console.Write(" T ")
                     'Else
                     '    Console.Write(" F ")
                     'End If
+
+
                 Next intJ
 
             Next intI
@@ -70,18 +70,13 @@ Module shuffleTheDeck
                     If Not currentArray(randomRow, randomColumn) Then
                         currentArray(randomRow, randomColumn) = True
                         'Console.WriteLine(randomRow, randomColumn)
-                        cardsRemaining = cardsInDeck - 1
-                        cardsInDeck = cardsRemaining
-                        randomColumnBuffer = randomColumn
-                        randomRowBuffer = randomRow
-                        setRow = randomRowBuffer
-                        setColumn = randomColumnBuffer
+                        cardsInDeck -= 1
 
+                        'cardsInDeck = cardsRemaining
 
+                        'This takes the number that is selected and displays them as a card value 
 
-
-
-                        Select Case setColumn
+                        Select Case randomColumn
                             Case 0
                                 cardSuit = " of Spades"
                             Case 1
@@ -99,11 +94,12 @@ Module shuffleTheDeck
                                 End If
                         End Select
 
-                        Select Case setRow
+                        Select Case randomRow
                             Case 0
                                 cardNumber = "Ace"
-                            Case 1 To 9
-                                cardNumber = CStr(setRow)
+                            Case 1
+                            Case 2 To 9
+                                cardNumber = CStr(randomRow)
                             Case 10
                                 cardNumber = "Jack"
                             Case 11
@@ -118,10 +114,12 @@ Module shuffleTheDeck
                                 End If
                         End Select
 
+                        'Displays cards values 
+
                         Console.WriteLine(cardNumber & cardSuit)
                         'Console.WriteLine(currentArray)
-                        userinput = Console.ReadLine()
-                        Console.WriteLine($"You have {cardsRemaining} Cards left in the Deck")
+                        Console.WriteLine()
+                        Console.WriteLine($"You have {cardsInDeck} Cards left in the Deck")
                         userinput = Console.ReadLine()
                         If userinput = "q" Then
                             Exit Sub
@@ -152,6 +150,11 @@ Module shuffleTheDeck
                         '    Exit Sub
                         'Else
                         'End If
+
+                        'If the programs selects something that has already been selected then nothing is displayed 
+                        'and the computer re excicutes its function 
+
+
                     ElseIf currentArray(randomRow, randomColumn) = True Then
 
                         'Console.WriteLine($"Row {randomRow} , Column {randomColumn}")
@@ -164,12 +167,20 @@ Module shuffleTheDeck
 
                     End If
                 Next
+                'This starts the loop to the begining so that it "shuffles the deck" 
                 If cardsInDeck = 0 Then
                     Console.WriteLine("Time To Shuffle!")
-                    userinput = Console.ReadLine()
-                    If userinput = "q" Then
-                        Exit Sub
-                    End If
+
+                    'This allows the user to quit at any time. 
+
+                    Select Case Console.ReadKey().Key
+                        Case ConsoleKey.Q
+                            Exit Sub
+                    End Select
+                    'userinput = Console.ReadLine()
+                    'If userinput = "q" Then
+                    '    Exit Sub
+                    'End If
                     Console.Clear()
 
                 End If
